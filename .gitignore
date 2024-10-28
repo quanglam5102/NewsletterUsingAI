@@ -1,0 +1,8 @@
+.node
+node_modules/
+__pycache__/
+.DS_Store
+main.js
+main.js.LICENSE.txt
+db.sqlite3
+.env
