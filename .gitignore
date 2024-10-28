@@ -7,3 +7,4 @@ main.js.LICENSE.txt
 db.sqlite3
 .env
 langflow.json
+logs/
