@@ -16,7 +16,8 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-FLOW_ID = os.getenv('FLOW_ID')
+FLOW_ID_NEWSLETTER = os.getenv('FLOW_ID_NEWSLETTER')
+FLOW_ID_CHATBOT = os.getenv('FLOW_ID_CHATBOT')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

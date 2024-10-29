@@ -9,6 +9,7 @@ import Login from "./Login";
 import Registration from "./Registration";
 import About from "./About";
 import Profile from "./Profile";
+import Chatbot from "./Chatbot";
 // import { AuthProvider, useAuth } from "./AuthProvider";
 import {
   BrowserRouter as Router,
@@ -53,6 +54,7 @@ export default class App extends Component {
         <Route path="/discussion" element={<ProtectedRoute element={<Discussion />} />} /> */}
         <Route path="/newsletter" element={<Newsletter />}/>
         <Route path="/profile" element={<Profile />} />
+        <Route path="/chatbot" element={<Chatbot />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       </Box>
