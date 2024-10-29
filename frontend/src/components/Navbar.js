@@ -35,6 +35,7 @@ function Navbar() {
 : [
     { label: "Home", path: "home" },
     { label: "Newsletter", path: "newsletter" },
+    { label: "Chatbot", path: "chatbot" },
     { label: "About", path: "about" },
     { label: "Register", path: "register" },
     { label: "Login", path: "login" }

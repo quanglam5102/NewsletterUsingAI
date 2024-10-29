@@ -2,6 +2,7 @@ import React, { Component, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { Box } from "@mui/material";
 import Newsletter from "./Newsletter";
+import Chatbot from "./Chatbot";
 import Home from "./Home";
 import NotFound from "./NotFound";
 import Navbar from "./Navbar";
@@ -51,6 +52,7 @@ export default class App extends Component {
         <Route path="/path" element={<LearningPath />} />
         <Route path="/content" element={<ProtectedRoute element={<Content />} />} />
         <Route path="/discussion" element={<ProtectedRoute element={<Discussion />} />} /> */}
+        <Route path="/chatbot" element={<Chatbot/>}/>
         <Route path="/newsletter" element={<Newsletter />}/>
         <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
