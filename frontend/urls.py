@@ -7,5 +7,6 @@ urlpatterns = [
     path('login', index),
     path('register', index),
     path('profile', index),
-    path('about', index)
+    path('about', index),
+    path('chatbot', index)
 ]
