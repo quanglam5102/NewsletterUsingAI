@@ -20,7 +20,6 @@ const Newsletter = () => {
     setOpen(true);
   };
 
-  // Function to close the modal
   const handleClose = () => {
     setOpen(false);
   };
@@ -166,8 +165,25 @@ const Newsletter = () => {
           </Typography>
         </Box>
       )}
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px', marginBottom: '20px' }}>
-        <Button variant="contained" color="primary" onClick={handleClickOpen}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "20px",
+          marginBottom: "20px",
+        }}
+      >
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: "#007BFF",
+            "&:hover": {
+              backgroundColor: "#0056b3",
+            },
+          }}
+          color="primary"
+          onClick={handleClickOpen}
+        >
           Open Chatbot
         </Button>
 
