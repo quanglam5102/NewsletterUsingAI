@@ -1,38 +1,81 @@
-import React, { useState } from "react";
-import { Box, Typography, Container, Button } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Typography,
+  Container,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
+import Chatbot from "./Chatbot";
 
 const Newsletter = () => {
-  const [newsletterBody, setNewsletterBody] = useState(""); // Hold only the body text
-  const [isLoading, setIsLoading] = useState(false); // For loading state
+  const [newsletterBody, setNewsletterBody] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  // const fetchResponse = async () => {
-  //   setIsLoading(true);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
-  //   try {
-  //     const response = await fetch("/api/chatbot/", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({ message: "VinFast's Growth" }), // Static message
-  //     });
-      
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       console.log('hello world', data.outputs[0].outputs[0].results.message.data.text)
-  //       // Assuming the response in this format `data.outputs[0].outputs[0].results.message.data.text`
-  //       setNewsletterBody(data.outputs[0].outputs[0].results.message.data.text || "No Content Available");
-  //     } else {
-  //       console.error("Error fetching response:", response.status);
-  //       setNewsletterBody("Failed to fetch content");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching response:", error);
-  //     setNewsletterBody("An error occurred while fetching the content.");
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+  // Function to close the modal
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-    const fetchResponse = async () => {
+  useEffect(() => {
+    const savedNewsletter = sessionStorage.getItem("newsletterContent");
+    if (savedNewsletter) {
+      setNewsletterBody(savedNewsletter);
+    }
+  }, []);
+
+  const formatResponse = (text) => {
+    // Array to hold dynamic headers
+    const detectedHeaders = [];
+
+    // Regex to detect potential headers (inside **)
+    const headerRegex = /\*\*([^*]+)\*\*/g;
+
+    // Detect headers and store them
+    let match;
+    while ((match = headerRegex.exec(text)) !== null) {
+      detectedHeaders.push(match[1]); // Store header text without asterisks
+    }
+
+    // Now replace **text** with <strong>text</strong> for bold
+    let formattedText = text.replace(headerRegex, "<strong>$1</strong>");
+
+    // Optional: Apply additional formatting like removing all remaining ** or markdown asterisks
+    formattedText = formattedText.replace(/\*\*/g, "");
+
+    // Additional formatting like line breaks before dates (optional)
+    formattedText = formattedText.replace(
+      /(\b(?:October|November)\s\d{1,2},?\s?\d{4}\b)/g,
+      "\n\n$1"
+    );
+    console.log("hello world", detectedHeaders);
+    // Loop through the detected headers and apply bold formatting (if needed)
+    detectedHeaders.forEach((header) => {
+      const headerRegex = new RegExp(`(^|\\n)(${header})(?=\\n)`, "g");
+      formattedText = formattedText.replace(
+        headerRegex,
+        `$1<strong>$2</strong>`
+      );
+    });
+
+    // Adding line breaks for better spacing (optional)
+    formattedText = formattedText.replace(
+      /([a-zA-Z0-9])\n([a-zA-Z0-9])/g,
+      "$1\n\n$2"
+    );
+
+    return formattedText;
+  };
+
+  const fetchResponse = async () => {
     setIsLoading(true);
 
     try {
@@ -41,12 +84,16 @@ const Newsletter = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: "VinFast's Growth" }),
       });
-      
+
       if (response.ok) {
         const data = await response.json();
-        console.log('hello world', data)
-        // Assuming the response in this format `data.outputs[0].outputs[0].results.message.data.text`
-        setNewsletterBody(data.outputs[0].outputs[0].results.message.data.text || "No Content Available");
+        const formattedText = formatResponse(
+          data.outputs[0].outputs[0].results.message.data.text ||
+            "No Content Available"
+        );
+
+        setNewsletterBody(formattedText);
+        sessionStorage.setItem("newsletterContent", formattedText);
       } else {
         console.error("Error fetching response:", response.status);
         setNewsletterBody("Failed to fetch content");
@@ -59,32 +106,8 @@ const Newsletter = () => {
     }
   };
 
-  // const fetchResponse = () => {
-  //   const fullText =
-  //     "Subject: sdlkfjsdlfjsdlfk. We are thrilled to announce. Best regards, [YOUR NAME] [YOUR POSITION] Vinfast.";
-
-  //   // Find the index of "Subject:" and the first period after it
-  //   const subjectIndex = fullText.indexOf("Subject:");
-  //   const firstPeriodIndex = fullText.indexOf(".", subjectIndex);
-  //   const bestRegardsIndex = fullText.indexOf("Best regards");
-
-  //   let cleanedBody = "";
-
-  //   if (firstPeriodIndex !== -1 && bestRegardsIndex !== -1) {
-  //     // Extract content between the first period and "Best regards"
-  //     cleanedBody = fullText
-  //       .slice(firstPeriodIndex + 1, bestRegardsIndex) // +1 to exclude the period itself
-  //       .trim();
-  //   } else {
-  //     cleanedBody = "No Content Available"; // In case there is no period or "Best regards" found
-  //   }
-
-  //   setNewsletterBody(cleanedBody);
-  // };
-
   return (
     <Container sx={{ marginTop: 4 }}>
-      {/* Button at the top */}
       <Box sx={{ textAlign: "center", marginBottom: 3 }}>
         <Button
           onClick={fetchResponse}
@@ -102,7 +125,6 @@ const Newsletter = () => {
         </Button>
       </Box>
 
-      {/* Newsletter content */}
       {newsletterBody && (
         <Box
           sx={{
@@ -113,7 +135,6 @@ const Newsletter = () => {
             marginTop: 3,
           }}
         >
-          {/* Static subject */}
           <Typography
             variant="h6"
             sx={{
@@ -125,7 +146,6 @@ const Newsletter = () => {
             VinFast's Latest News
           </Typography>
 
-          {/* Header with salutation */}
           <Typography
             variant="body1"
             sx={{ fontWeight: "bold", marginBottom: 2 }}
@@ -133,15 +153,12 @@ const Newsletter = () => {
             Dear Readers,
           </Typography>
 
-          {/* Dynamic body content */}
           <Typography
             variant="body1"
-            sx={{ marginBottom: 3, lineHeight: 1.6 }}
-          >
-            {newsletterBody}
-          </Typography>
+            sx={{ marginBottom: 3, lineHeight: 1.6, whiteSpace: "pre-line" }}
+            dangerouslySetInnerHTML={{ __html: newsletterBody }}
+          ></Typography>
 
-          {/* Static footer */}
           <Typography variant="body1" sx={{ marginTop: 4 }}>
             <strong>Best regards,</strong> <br />
             Quang Lam Huynh <br />
@@ -149,6 +166,36 @@ const Newsletter = () => {
           </Typography>
         </Box>
       )}
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px', marginBottom: '20px' }}>
+        <Button variant="contained" color="primary" onClick={handleClickOpen}>
+          Open Chatbot
+        </Button>
+
+        <Dialog open={open} onClose={handleClose} keepMounted>
+          <DialogTitle>Vinfast Assistant</DialogTitle>
+          <DialogContent>
+            <Chatbot />
+          </DialogContent>
+          <DialogActions
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              onClick={handleClose}
+              color="primary"
+              sx={{
+                alignSelf: "center",
+                fontSize: "1.15rem",
+              }}
+            >
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Box>
     </Container>
   );
 };

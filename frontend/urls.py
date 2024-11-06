@@ -8,5 +8,4 @@ urlpatterns = [
     path('register', index),
     path('profile', index),
     path('about', index),
-    path('chatbot', index)
 ]

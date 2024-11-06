@@ -6,6 +6,7 @@ import { Box, Typography, Paper, Button, TextField, List, ListItem, ListItemText
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
   const [userMessage, setUserMessage] = useState('');
+  const savedNewsletter = sessionStorage.getItem("newsletterContent");
   const [isLoading, setIsLoading] = useState(false); // For loading state
 
   const handleSendMessage = async () => {
@@ -13,6 +14,7 @@ const Chatbot = () => {
       // Add user's message to conversation
       const newMessage = { sender: 'user', text: userMessage };
       setMessages((prevMessages) => [...prevMessages, newMessage]);
+      const messageToSend = `${userMessage}? Try to answer based on the following newsletter's information first, if not applicable, then use your own knowledge. ${savedNewsletter || ''}`.trim();
 
       // Send the message to the chatbot API
       try {
@@ -20,7 +22,7 @@ const Chatbot = () => {
         const response = await fetch('/api/chatbot/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: userMessage }),
+          body: JSON.stringify({ message: messageToSend }),
         });
         const data = await response.json();
         console.log(data);
@@ -46,18 +48,10 @@ const Chatbot = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '95vh', // Full viewport height for vertical centering
-        backgroundColor: '#f0f0f0' // Optional: add background color
-      }}
-    >
+
       <Paper elevation={3} sx={{ width: 400, height: 600, display: 'flex', flexDirection: 'column', borderRadius: 2 }}>
         <Box sx={{ backgroundColor: '#1976d2', color: 'white', padding: 2, textAlign: 'center' }}>
-          <Typography variant="h6">Vinfast Chatbot</Typography>
+          <Typography variant="h6">Chatbot</Typography>
         </Box>
         <List sx={{ flex: 1, overflowY: 'auto', padding: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {messages.map((msg, index) => (
@@ -97,7 +91,7 @@ const Chatbot = () => {
           </Button>
         </Box>
       </Paper>
-    </Box>
+ 
   );
 };
 

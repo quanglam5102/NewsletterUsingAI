@@ -112,7 +112,6 @@ class NewsletterAIView(APIView):
         """
         Handle POST requests to run a flow with a given message and optional tweaks.
         """
-        print('key', settings.FLOW_ID_NEWSLETTER)
         # Extracting parameters from the request body
         message = request.data.get('message', 'randomtext')
         endpoint = settings.FLOW_ID_NEWSLETTER
