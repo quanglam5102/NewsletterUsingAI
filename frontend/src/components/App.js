@@ -54,7 +54,6 @@ export default class App extends Component {
         <Route path="/discussion" element={<ProtectedRoute element={<Discussion />} />} /> */}
         <Route path="/newsletter" element={<Newsletter />}/>
         <Route path="/profile" element={<Profile />} />
-        <Route path="/chatbot" element={<Chatbot />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       </Box>
