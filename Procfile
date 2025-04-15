@@ -1,0 +1,1 @@
+web gunicorn newsletterapp.wsgi:application --log-file -
