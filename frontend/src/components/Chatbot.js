@@ -50,7 +50,7 @@ const Chatbot = () => {
   return (
 
       <Paper elevation={3} sx={{ width: 400, height: 600, display: 'flex', flexDirection: 'column', borderRadius: 2 }}>
-        <Box sx={{ backgroundColor: '#1976d2', color: 'white', padding: 2, textAlign: 'center' }}>
+        <Box sx={{ backgroundColor: '#00008B', color: 'white', padding: 2, textAlign: 'center' }}>
           <Typography variant="h6">Chatbot</Typography>
         </Box>
         <List sx={{ flex: 1, overflowY: 'auto', padding: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
